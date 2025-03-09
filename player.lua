@@ -1,4 +1,5 @@
 local uilib = loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/Bruise/refs/heads/main/core/ui/interface.lua'))()
+local url = 'https://api.soundcloud.com/tracks/TRACK_ID'
 local cloneref = cloneref or function(v) return v; end;
 local Workspace: Workspace = cloneref(game:GetService('Workspace'));
 
@@ -58,3 +59,24 @@ local globalSettings = {
 		end,
 	})
 };
+
+local tabs = {
+	music = Window:TabGroup()
+};
+
+local uitabs = {
+    music = tabs.music:Tab({
+        Name = "Music",
+        Image = "rbxassetid://14368350193"
+    })
+};
+
+local sections = {
+	music = {
+		left = uitabs.render:Section({
+			Side = 'Left'
+		})
+	}
+};
+
+--// musicplayer module/api handling
