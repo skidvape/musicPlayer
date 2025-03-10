@@ -125,7 +125,7 @@ run(function()
             if value then newAudio.Volume = value end
         end,
     }, "Volume")
-    Loop = sections.utility.left:Toggle({
+    Loop = sections.music.left:Toggle({
         Name = "Loop",
         Default = false,
         Callback = function(value)
