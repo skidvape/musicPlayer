@@ -84,7 +84,7 @@ local uitabs = {
 
 local sections = {
 	music = {
-		left = uitabs.render:Section({
+		left = uitabs.music:Section({
 			Side = 'Left'
 		})
 	}
