@@ -1,5 +1,6 @@
+-- trackId = 1953263803
+
 local uilib = loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/Bruise/refs/heads/main/core/ui/interface.lua'))()
-local url = 'https://api.soundcloud.com/tracks/TRACK_ID'
 local cloneref = cloneref or function(v) return v; end;
 local Workspace: Workspace = cloneref(game:GetService('Workspace'));
 
@@ -60,6 +61,16 @@ local globalSettings = {
 	})
 };
 
+run = function(v)
+    local suc, res = pcall(function()
+        v();
+    end);
+    
+    if res then
+		warn(tostring(res))
+	end;
+end;
+
 local tabs = {
 	music = Window:TabGroup()
 };
@@ -80,3 +91,59 @@ local sections = {
 };
 
 --// musicplayer module/api handling
+streamURL = function(track)
+    return string.format(game:HttpGet('https://api.soundcloud.com/tracks/%s/stream'), track)
+end
+
+run(function()
+	local MusicPlayer
+	local TrackId
+	local Volume
+    local Loop
+    local newAudio
+	MusicPlayer = sections.music.left:Toggle({
+        Name = "MusicPlayer",
+        Default = false,
+        Callback = function(callback)
+            if callback and TrackId.Value ~= "" then
+				newAudio = Instance.new("Sound", workspace)
+				newAudio.SoundId = streamURL(TrackId.Value)
+				newAudio.Volume = Volume.Value
+				newAudio.Looped = Loop.Value
+				newAudio:Play()
+			end
+		end
+	})
+	Volume = sections.music.left:Slider({
+        Name = "Volume",
+        Default = 1,
+        Minimum = 0,
+        Maximum = 1,
+        DisplayMethod = "Percent",
+        Callback = function(value)
+            Volume.Value = value
+            if value then newAudio.Volume = value end
+        end,
+    }, "Volume")
+    Loop = sections.utility.left:Toggle({
+        Name = "Loop",
+        Default = false,
+        Callback = function(value)
+            Loop.Value = value;
+            if value then newAudio.Looped = value end
+        end,
+    }, "Loop")
+	TrackId = sections.music.left:Input({
+		Name = 'TrackID',
+		Placeholder = '1234',
+		AcceptedCharacters = "Numeric",
+		Callback = function(value)
+			TrackId.Value = value
+			if newaudio and newAudio.IsPlaying then
+				newAudio:Stop()
+				newAudio.SoundId = streamURL(value)
+				newAudio:Play()
+			end
+		end
+	}, 'TrackId')
+end)
